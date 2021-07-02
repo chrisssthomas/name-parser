@@ -2,15 +2,22 @@
 require("partials/head.php");
 require("HandleCsv.php");
 
+include("Parser.php");
+
 $handler = new HandleCsv();
 
-// foreach($handler->csvToArray() as $line) {
-//     echo'<pre>';
-//     echo $line;
-//     echo'</pre>';
-// }
 
-$handler->parseNames();
+$parser = new FullNameParser();
+
+
+
+
+
+foreach($handler->csvToArray() as $line) {
+    echo'<pre>';
+    print_r($parser->parse_name($line));
+    echo'</pre>';
+}
 
 ?>
 

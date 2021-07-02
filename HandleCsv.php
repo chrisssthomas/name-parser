@@ -5,6 +5,7 @@
  * @author Christopher Thomas
 */
 
+
 class HandleCsv
 {
     /**
@@ -34,8 +35,6 @@ class HandleCsv
         foreach($arr as $n) 
         {
             $r = [];
-
-            echo $n;
 
             preg_match('#^(\w+\.)?\s*([\'\’\w]+)\s+([\'\’\w]+)\s*(\w+\.?)?$#', $n, $r);
 
