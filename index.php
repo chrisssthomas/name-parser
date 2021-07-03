@@ -1,21 +1,18 @@
 <?php 
+
+require __DIR__ . '/vendor/autoload.php';
+
 require("partials/head.php");
 require("HandleCsv.php");
 
-include("Parser.php");
+use ADCI\FullNameParser\Parser;
 
+$parser = new Parser();
 $handler = new HandleCsv();
-
-
-$parser = new FullNameParser();
-
-
-
-
 
 foreach($handler->csvToArray() as $line) {
     echo'<pre>';
-    print_r($parser->parse_name($line));
+    print_r($parser->parse($line));
     echo'</pre>';
 }
 

@@ -1,0 +1,14 @@
+{
+    "name": "chris/name-parser",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Christopher Thomas",
+            "email": "chrissssthomas@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "adci/full-name-parser": "dev-master"
+    }
+}

@@ -5,7 +5,6 @@
  * @author Christopher Thomas
 */
 
-
 class HandleCsv
 {
     /**
@@ -20,12 +19,7 @@ class HandleCsv
 
         array_shift($arr);
 
-        var_dump($arr);
-
-
         return $arr;
-
-
     }
 
     public function parseNames()
