@@ -1,16 +1,10 @@
 <?php 
 require("partials/head.php");
-require("HandleCsv.php");
+require("ParseName.php");
 
-$handler = new HandleCsv();
+$parser = new ParseName();
 
-// foreach($handler->csvToArray() as $line) {
-//     echo'<pre>';
-//     echo $line;
-//     echo'</pre>';
-// }
-
-$handler->parseNames();
+$parser->buildPerson();
 
 ?>
 
