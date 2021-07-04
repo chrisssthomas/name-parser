@@ -6,6 +6,10 @@
  * with the following structure, even if there are 
  * more than one person per field.
  * 
+ * e.g. 
+ * $parser = new ParseName;
+ * $parser->makePeople();
+ * 
  * $person['title']
  * $person['first_name']
  * $person['initial']
@@ -71,7 +75,7 @@ class ParseName
     
                         break;
                     case count($split) > 1 && str_word_count($split[0]) !== 1:
-                        $test = $split;
+                        $full_names = $split;
                         break;
                 }
             }
@@ -82,7 +86,7 @@ class ParseName
 
         $combined_singular_and_combined = array_merge($combined_names, $singular_names);
 
-        $merged_array = array_merge($combined_singular_and_combined, $test);
+        $merged_array = array_merge($combined_singular_and_combined, $full_names);
 
         $full_list = array_map('trim', array_filter(str_replace(PHP_EOL, '', $merged_array)));
 
@@ -90,11 +94,13 @@ class ParseName
     }
 
     /**
-     * Build the person Array, first by calling findPairs()
+     * Build the person Array, first by calling findPairs() method
+     * match the name with the TITLE_REGEX and find the given last name.
+     * Proceed to build the person array based on the remaining word count.
      * 
      * @return array $people
      */
-    public function formatPeople()
+    public function makePeople()
     {
         $arr = $this->findPairs();
 
@@ -153,12 +159,12 @@ class ParseName
      * Find the last name or word in a given string.
      *
      * @param string $name
-     * @return string $last_word
+     * @return string $last_name
      */
     public function findLastName($name)
     {
         $pieces = explode(' ', $name);
-        $last_word = array_pop($pieces);
-        return $last_word;
+        $last_name = array_pop($pieces);
+        return $last_name;
     }
 }
