@@ -84,8 +84,6 @@ class ParseName
 
         $merged_array = array_merge($combined_singular_and_combined, $test);
 
-        // var_dump($merged_array);
-
         $full_list = array_map('trim', array_filter(str_replace(PHP_EOL, '', $merged_array)));
 
         return $full_list;
