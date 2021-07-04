@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /** 
  * 
  * Given an array of peoples names in strings,
@@ -20,7 +21,7 @@
  * @author Christopher Thomas
 */
 
-class ParseName
+class NameParser
 {
     // Regex for name titles, e.g. Miss, Mr, Mrs, Ms, Mister, Prof, Dr
     public const TITLE_REGEX = '^(Miss|Mr|Mrs|Ms|Mister|Prof|Dr)\b^';
@@ -33,7 +34,7 @@ class ParseName
      * 
      * @return array $arr
      */
-    public function csvToArray()
+    public function csvToArray() : array
     {
         $arr = str_getcsv(file_get_contents('examples.csv'));
 
@@ -53,7 +54,7 @@ class ParseName
      *
      * @return array $full_list
      */
-    public function findPairs()
+    public function findPairs() : array
     {
         $arr = $this->csvToArray();
 
@@ -100,7 +101,7 @@ class ParseName
      * 
      * @return array $people
      */
-    public function makePeople()
+    public function makePeople() : array
     {
         $arr = $this->findPairs();
 
@@ -143,7 +144,7 @@ class ParseName
      * @param string $name
      * @return boolean
      */
-    public function isInitial($name)
+    public function isInitial(string $name) : bool
     {
         $trim_periods = rtrim($name, '.');
 
@@ -161,7 +162,7 @@ class ParseName
      * @param string $name
      * @return string $last_name
      */
-    public function findLastName($name)
+    public function findLastName(string $name) : string
     {
         $pieces = explode(' ', $name);
         $last_name = array_pop($pieces);
