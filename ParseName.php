@@ -1,22 +1,26 @@
 <?php
 /** 
  * 
+ * Given an array of peoples names in strings,
+ * this class will parse and build a person array
+ * with the following structure, even if there are 
+ * more than one person per field.
  * 
- * TODO: Parse initial
- * TODO: Parse first names
- * TODO: Parse last name (started) DONE
- * TODO: Parse title (started) DONE
+ * $person['title']
+ * $person['first_name']
+ * $person['initial']
+ * $person['last_name']
  * 
  * 
- * @package CSV-Parser
+ * @package Name Parser
  * @author Christopher Thomas
 */
 
 class ParseName
 {
-
-    // Regex for name titles
+    // Regex for name titles, e.g. Miss, Mr, Mrs, Ms, Mister, Prof, Dr
     public const TITLE_REGEX = '^(Miss|Mr|Mrs|Ms|Mister|Prof|Dr)\b^';
+    // Regex for basic coordinating conjunctions, e.g. &, and
     public const AND_REGEX = '/&(?!(?:apos|quot|[gl]t|amp);|#)|(and)/';
 
     /**
@@ -36,19 +40,18 @@ class ParseName
 
     /**
      * Split by the AND_REGEX and if the count of the
-     * array is more than 1 (more than 1 person) assign that
-     * person the correct last name.
+     * array is more than 1 (more than 1 person) assign the
+     * corrosponding person the correct last name.
+     * 
+     * It goes without saying all of the regex's in this implemenation
+     * could be expanded upon for more complex data sets.
      * 
      *
-     * @return array $fullnames
+     * @return array $full_list
      */
     public function findPairs()
     {
         $arr = $this->csvToArray();
-
-        $combined_names = [];
-
-        $other_names = [];
 
         foreach($arr as $n) 
         {
@@ -58,44 +61,49 @@ class ParseName
 
                 unset($n);
 
-                if(count($split) > 1 && str_word_count($split[0]) === 1)
-                {
-                    $last_name = $this->findLastName($split[1]);
+                switch ($split) {
+                    case count($split) > 1 && str_word_count($split[0]) === 1:
+                        $last_name = $this->findLastName($split[1]);
 
-                    $joined_names = $split[0] .= $last_name;
-
-                    $fullnames = $split[1];
-
-                    $combined_names[] = $fullnames;
-
-                    $combined_names[] = $joined_names;
-
-                } elseif(count($split) > 1 && str_word_count($split[0]) !== 1) {
-
-                    $combined_names = $split;
+                        $combined_names[] = $split[1];
+    
+                        $combined_names[] = $split[0] .= $last_name;
+    
+                        break;
+                    case count($split) > 1 && str_word_count($split[0]) !== 1:
+                        $test = $split;
+                        break;
                 }
             }
-
-            $other_names[] = $n ?? null;
+            if(!empty($n)) {
+                $singular_names[] = $n;
+            }
         }
-        $combined_list = array_merge($combined_names, $other_names);
 
-        $full_list = array_map('trim', array_filter(str_replace(PHP_EOL, '', $combined_list)));
+        $combined_singular_and_combined = array_merge($combined_names, $singular_names);
+
+        $merged_array = array_merge($combined_singular_and_combined, $test);
+
+        // var_dump($merged_array);
+
+        $full_list = array_map('trim', array_filter(str_replace(PHP_EOL, '', $merged_array)));
 
         return $full_list;
     }
 
     /**
-     * Find titles
+     * Build the person Array, first by calling findPairs()
      * 
-     * @return array $arr
+     * @return array $people
      */
-    public function buildPerson()
+    public function formatPeople()
     {
         $arr = $this->findPairs();
 
-        foreach($arr as $n) 
-        {
+        $people = [];
+
+        foreach($arr as $n) {
+            
             preg_match(self::TITLE_REGEX, $n, $r);
 
             $last_name = $this->findLastName($n);
@@ -112,31 +120,47 @@ class ParseName
                     $person['initial'] = null;
                     $person['first_name'] = $split[1];
                 }
+            } elseif (str_word_count($n) <= 2) {
+                $person['first_name'] = null;
+                $person['initial'] = null;
             }
+
             $person['last_name'] = $last_name;
 
-            echo '<pre>';
-            print_r($person);
-            echo '</pre>';
+            $people[] = $person;
         }
+
+        return $people;
     }
 
+    /**
+     * Check whether the given name is an initial.
+     *
+     * @param string $name
+     * @return boolean
+     */
     public function isInitial($name)
     {
         $trim_periods = rtrim($name, '.');
-        $test = array_count_values(str_split($trim_periods));
 
-        if (count($test) === 1) {
+        $str_count = array_count_values(str_split($trim_periods));
+
+        if (count($str_count) === 1) {
             return true;
         }
         return false;
     }
 
+    /**
+     * Find the last name or word in a given string.
+     *
+     * @param string $name
+     * @return string $last_word
+     */
     public function findLastName($name)
     {
         $pieces = explode(' ', $name);
         $last_word = array_pop($pieces);
-
         return $last_word;
     }
 }

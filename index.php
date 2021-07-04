@@ -4,8 +4,10 @@ require("ParseName.php");
 
 $parser = new ParseName();
 
-$parser->buildPerson();
-
+echo '<pre style="border-top: 5px solid black;">';
+echo '<strong>Final list below</strong> <br />';
+print_r($parser->formatPeople());
+echo '</pre>';
 ?>
 
 <?php require("partials/foot.php"); ?>
