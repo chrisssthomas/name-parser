@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /** 
  * 
  * Given an array of peoples names in strings,
@@ -17,11 +16,11 @@ declare(strict_types=1);
  * $person['last_name']
  * 
  * 
- * @package Name Parser
+ * @package name-parser
  * @author Christopher Thomas
 */
 
-class NameParser
+class ParseName
 {
     // Regex for name titles, e.g. Miss, Mr, Mrs, Ms, Mister, Prof, Dr
     public const TITLE_REGEX = '^(Miss|Mr|Mrs|Ms|Mister|Prof|Dr)\b^';
@@ -58,10 +57,8 @@ class NameParser
     {
         $arr = $this->csvToArray();
 
-        foreach($arr as $n) 
-        {
+        foreach($arr as $n) {
             if (preg_match(self::AND_REGEX, $n)) {
-
                 $split = preg_split(self::AND_REGEX, $n);
 
                 unset($n);
@@ -77,6 +74,7 @@ class NameParser
                         break;
                     case count($split) > 1 && str_word_count($split[0]) !== 1:
                         $full_names = $split;
+
                         break;
                 }
             }
@@ -108,7 +106,6 @@ class NameParser
         $people = [];
 
         foreach($arr as $n) {
-            
             preg_match(self::TITLE_REGEX, $n, $r);
 
             $last_name = $this->findLastName($n);
@@ -153,6 +150,7 @@ class NameParser
         if (count($str_count) === 1) {
             return true;
         }
+
         return false;
     }
 
@@ -165,7 +163,9 @@ class NameParser
     public function findLastName(string $name) : string
     {
         $pieces = explode(' ', $name);
+
         $last_name = array_pop($pieces);
+
         return $last_name;
     }
 }

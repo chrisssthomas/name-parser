@@ -1,8 +1,8 @@
 <?php 
 require("partials/head.php");
-require("NameParser.php");
+require("ParseName.php");
 
-$parser = new NameParser();
+$parser = new ParseName();
 
 echo '<pre style="border-top: 5px solid black;">';
 echo '<strong>Final list below</strong> <br />';
