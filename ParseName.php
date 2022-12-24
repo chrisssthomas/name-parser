@@ -147,11 +147,7 @@ class ParseName
 
         $str_count = array_count_values(str_split($trim_periods));
 
-        if (count($str_count) === 1) {
-            return true;
-        }
-
-        return false;
+        return count($str_count) === 1);
     }
 
     /**
