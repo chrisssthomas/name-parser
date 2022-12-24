@@ -33,7 +33,7 @@ class ParseName
      * 
      * @return array $arr
      */
-    public function csvToArray() : array
+    public function csvToArray(): array
     {
         $arr = str_getcsv(file_get_contents('examples.csv'));
 
@@ -53,7 +53,7 @@ class ParseName
      *
      * @return array $full_list
      */
-    public function findPairs() : array
+    public function findPairs(): array
     {
         $arr = $this->csvToArray();
 
@@ -84,9 +84,7 @@ class ParseName
         }
 
         $combined_singular_and_combined = array_merge($combined_names, $singular_names);
-
         $merged_array = array_merge($combined_singular_and_combined, $full_names);
-
         $full_list = array_map('trim', array_filter(str_replace(PHP_EOL, '', $merged_array)));
 
         return $full_list;
@@ -99,7 +97,7 @@ class ParseName
      * 
      * @return array $people
      */
-    public function makePeople() : array
+    public function makePeople(): array
     {
         $arr = $this->findPairs();
 
@@ -141,10 +139,9 @@ class ParseName
      * @param string $name
      * @return boolean
      */
-    public function isInitial(string $name) : bool
+    public function isInitial(string $name): bool
     {
         $trim_periods = rtrim($name, '.');
-
         $str_count = array_count_values(str_split($trim_periods));
 
         return count($str_count) === 1);
@@ -156,10 +153,9 @@ class ParseName
      * @param string $name
      * @return string $last_name
      */
-    public function findLastName(string $name) : string
+    public function findLastName(string $name): string
     {
         $pieces = explode(' ', $name);
-
         $last_name = array_pop($pieces);
 
         return $last_name;
